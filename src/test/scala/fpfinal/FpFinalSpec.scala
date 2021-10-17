@@ -7,7 +7,7 @@ import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 
 trait FpFinalSpec
     extends AnyFunSuite
-    with Generators
-    with Configuration
-    with FunSuiteDiscipline
-    with ScalaCheckDrivenPropertyChecks
+       with Generators
+       with Configuration
+       with FunSuiteDiscipline
+       with ScalaCheckDrivenPropertyChecks

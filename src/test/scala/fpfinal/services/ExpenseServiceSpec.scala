@@ -25,12 +25,12 @@ class ExpenseServiceSpec extends FpFinalSpec {
   test("computeDebt for no expenses") {
     val initialState = ExpenseState(Nil)
     val expectedDebt = Monoid[DebtByPayer].empty
-    val result = service.computeDebt().run(initialState).value
+    val result       = service.computeDebt().run(initialState).value
     assert(result eqv (initialState, expectedDebt))
   }
 
   test("computeDebt for some expenses") {
-    val martin = Person.unsafeCreate("Martin")
+    val martin  = Person.unsafeCreate("Martin")
     val leandro = Person.unsafeCreate("Leandro")
     val eugenia = Person.unsafeCreate("Eugenia")
     val expense1 = Expense.unsafeCreate(
@@ -49,7 +49,7 @@ class ExpenseServiceSpec extends FpFinalSpec {
         leandro -> DebtByPayee.unsafeCreate(
           Map(
             eugenia -> Money.unsafeCreate(700),
-            martin -> Money.unsafeCreate(700)
+            martin  -> Money.unsafeCreate(700)
           )
         ),
         martin -> DebtByPayee.unsafeCreate(

@@ -4,7 +4,7 @@ import cats.Order
 import cats.data.NonEmptySet
 import cats.data.Validated.Valid
 import cats.implicits._
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.{ Arbitrary, Gen }
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 

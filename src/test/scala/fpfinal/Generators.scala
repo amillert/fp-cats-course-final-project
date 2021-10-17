@@ -1,20 +1,19 @@
 package fpfinal
 
-import cats.data.{NonEmptyChain, State}
+import cats.data.{ NonEmptyChain, State }
 import cats.implicits._
 import fpfinal.app.AppState
 import fpfinal.app.Configuration.IsValid
 import fpfinal.common.IO
-import fpfinal.common.IO.{Done, FlatMap, More}
+import fpfinal.common.IO.{ Done, FlatMap, More }
 import fpfinal.model._
-import fpfinal.service.ExpenseService.{ExpenseOp, ExpenseState}
-import fpfinal.service.PersonService.{PersonOp, PersonState}
-import org.scalacheck.{Arbitrary, Gen}
+import fpfinal.service.ExpenseService.{ ExpenseOp, ExpenseState }
+import fpfinal.service.PersonService.{ PersonOp, PersonState }
+import org.scalacheck.{ Arbitrary, Gen }
 
 trait Generators {
 
-  /**
-    * TODO: implement an arbitrary of Person.
+  /** TODO: implement an arbitrary of Person.
     *
     * You can use Person.unsafeCreate as long as you take
     * care of only producing valid values (check out
@@ -26,14 +25,14 @@ trait Generators {
     Gen.choose(1, 1e9.toInt).map(Money.unsafeCreate)
   }
 
-  /**
-    * TODO: Use the provided arbitraries and the Expense.unsafeCreate method
+  /** TODO: Use the provided arbitraries and the Expense.unsafeCreate method
     * to create an instance of Arbitrary[Expense]
     */
-  implicit def expenseArb(implicit
+  implicit def expenseArb(
+      implicit
       arbPerson: Arbitrary[Person],
       arbMoney: Arbitrary[Money]
-  ): Arbitrary[Expense] = ???
+    ): Arbitrary[Expense] = ???
 
   implicit val payeeDebtArb: Arbitrary[DebtByPayee] = Arbitrary {
     Gen
@@ -52,9 +51,10 @@ trait Generators {
       arbA.arbitrary.map(a => (_: A) => a)
     }
 
-  implicit def personStateArb(implicit
+  implicit def personStateArb(
+      implicit
       personArb: Arbitrary[Person]
-  ): Arbitrary[PersonState] =
+    ): Arbitrary[PersonState] =
     Arbitrary {
       Gen
         .mapOf[String, Person](personArb.arbitrary.map(p => (p.name, p)))
@@ -73,17 +73,19 @@ trait Generators {
     Arbitrary(Gen.oneOf(doneGen, moreGen, flatMapGen))
   }
 
-  implicit def expenseStateArb(implicit
+  implicit def expenseStateArb(
+      implicit
       expenseArb: Arbitrary[Expense]
-  ): Arbitrary[ExpenseState] =
+    ): Arbitrary[ExpenseState] =
     Arbitrary {
       Gen.listOf(expenseArb.arbitrary).map(ExpenseState.apply)
     }
 
-  implicit def appStateArb(implicit
+  implicit def appStateArb(
+      implicit
       arbPersonState: Arbitrary[PersonState],
       arbExpenseState: Arbitrary[ExpenseState]
-  ): Arbitrary[AppState] =
+    ): Arbitrary[AppState] =
     Arbitrary {
       for {
         ps <- arbPersonState.arbitrary
@@ -91,21 +93,22 @@ trait Generators {
       } yield AppState(es, ps)
     }
 
-  /**
-    * TODO: implement an arbitrary of PersonOp[A].
+  /** TODO: implement an arbitrary of PersonOp[A].
     *
     * One possible implementation is to create a State
     * whose run function ignores the current state and just
     * sets the state and value to random values.
     */
-  implicit def personOpArb[A](implicit
+  implicit def personOpArb[A](
+      implicit
       arbA: Arbitrary[A],
       arbPersonState: Arbitrary[PersonState]
-  ): Arbitrary[PersonOp[A]] = ???
+    ): Arbitrary[PersonOp[A]] = ???
 
-  implicit def isValidArb[A](implicit
+  implicit def isValidArb[A](
+      implicit
       arbA: Arbitrary[A]
-  ): Arbitrary[IsValid[A]] = {
+    ): Arbitrary[IsValid[A]] = {
     val validGen: Gen[IsValid[A]] = arbA.arbitrary.map(_.validNec[String])
     val invalidGen: Gen[IsValid[A]] = Gen
       .nonEmptyListOf(Arbitrary.arbitrary[String])
@@ -113,13 +116,14 @@ trait Generators {
     Arbitrary(Gen.oneOf(validGen, invalidGen))
   }
 
-  implicit def expenseOpGen[A](implicit
+  implicit def expenseOpGen[A](
+      implicit
       arbA: Arbitrary[A],
       expenseStateArb: Arbitrary[ExpenseState]
-  ): Arbitrary[ExpenseOp[A]] =
+    ): Arbitrary[ExpenseOp[A]] =
     Arbitrary {
       for {
-        a <- arbA.arbitrary
+        a  <- arbA.arbitrary
         es <- expenseStateArb.arbitrary
       } yield State((_: ExpenseState) => (es, a))
     }

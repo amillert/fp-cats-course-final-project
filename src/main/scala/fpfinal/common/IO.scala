@@ -16,8 +16,8 @@ trait IO[+A] {
 }
 
 object IO {
-  case class Done[A](a: A) extends IO[A]
-  case class More[A](f: () => IO[A]) extends IO[A]
+  case class Done[A](a: A)                           extends IO[A]
+  case class More[A](f: () => IO[A])                 extends IO[A]
   case class FlatMap[A, B](ta: IO[A], f: A => IO[B]) extends IO[B]
 
   @tailrec
@@ -44,11 +44,10 @@ object IO {
 
     override def flatMap[A, B](fa: IO[A])(f: A => IO[B]): IO[B] = FlatMap(fa, f)
 
-    override def tailRecM[A, B](a: A)(f: A => IO[Either[A, B]]): IO[B] = {
+    override def tailRecM[A, B](a: A)(f: A => IO[Either[A, B]]): IO[B] =
       flatMap(f(a)) {
         case Left(a)  => tailRecM(a)(f)
         case Right(b) => pure(b)
       }
-    }
   }
 }

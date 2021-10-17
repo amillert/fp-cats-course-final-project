@@ -1,6 +1,6 @@
 package fpfinal.fakes
 
-import fpfinal.app.{Command, Controller}
+import fpfinal.app.{ Command, Controller }
 
 trait FakeController extends Controller {
   val commands: Map[Int, Command] = Map.empty

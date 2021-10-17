@@ -2,10 +2,10 @@ package fpfinal.app
 
 import cats._
 import cats.implicits._
-import fpfinal.app.Configuration.{AppOp, IsValid, SuccessMsg, readEnv}
+import fpfinal.app.Configuration.{ readEnv, AppOp, IsValid, SuccessMsg }
 import fpfinal.app.Syntax._
 import fpfinal.common.Validations._
-import fpfinal.model.{Expense, Money, Person}
+import fpfinal.model.{ Expense, Money, Person }
 
 sealed trait Command {
   val name: String
@@ -34,33 +34,29 @@ object AddExpenseCommand extends Command {
       payer: String,
       amount: Double,
       participants: List[String]
-  )
+    )
 
   def execute(): AppOp[SuccessMsg] = {
-    def readPayer(): AppOp[String] = {
+    def readPayer(): AppOp[String] =
       for {
-        env <- readEnv
+        env  <- readEnv
         name <- env.console.readLine("Enter payer's name: ").toAppOp
       } yield name
-    }
 
-    def readAmount(): AppOp[String] = {
+    def readAmount(): AppOp[String] =
       for {
-        env <- readEnv
+        env    <- readEnv
         amount <- env.console.readLine("Enter amount: ").toAppOp
       } yield amount
-    }
 
-    /**
-      * TODO: Implement a function that reads participant names from console until the
+    /** TODO: Implement a function that reads participant names from console until the
       * user enters END to finish.
       *
       * Extra points: implement it using ME.tailRecM
       */
     def readParticipants(): AppOp[List[String]] = ???
 
-    /**
-      * TODO: Use the helper functions in common.Validations and return a validated
+    /** TODO: Use the helper functions in common.Validations and return a validated
       * instance of AddExpenseData. The validations to perform are:
       * - payer should be a nonempty string
       * - amount should be a valid double
@@ -70,19 +66,17 @@ object AddExpenseCommand extends Command {
         payer: String,
         amount: String,
         participants: List[String]
-    ): IsValid[AddExpenseData] = ???
+      ): IsValid[AddExpenseData] = ???
 
-    def readData(): AppOp[AddExpenseData] = {
+    def readData(): AppOp[AddExpenseData] =
       for {
-        payer <- readPayer()
-        amount <- readAmount()
+        payer        <- readPayer()
+        amount       <- readAmount()
         participants <- readParticipants()
-        validData <- validateData(payer, amount, participants).toAppOp
+        validData    <- validateData(payer, amount, participants).toAppOp
       } yield validData
-    }
 
-    /**
-      * TODO: Implement a function that finds a person by name.
+    /** TODO: Implement a function that finds a person by name.
       *
       * It should be a wrapper of the PersonService analogous function,
       * handling translation between types and converting None results to errors
@@ -95,13 +89,13 @@ object AddExpenseCommand extends Command {
     }
 
     for {
-      env <- readEnv
-      data <- readData()
-      payer <- findPerson(data.payer)
-      amount <- Money.dollars(data.amount).toAppOp
-      participants <- data.participants.traverse { findPerson }
-      expense <- Expense.create(payer, amount, participants).toAppOp
-      _ <- env.expenseService.addExpense(expense).toAppOp
+      env          <- readEnv
+      data         <- readData()
+      payer        <- findPerson(data.payer)
+      amount       <- Money.dollars(data.amount).toAppOp
+      participants <- data.participants.traverse(findPerson)
+      expense      <- Expense.create(payer, amount, participants).toAppOp
+      _            <- env.expenseService.addExpense(expense).toAppOp
     } yield "Expense created successfully"
   }
 }
@@ -111,25 +105,22 @@ case object AddPersonCommand extends Command {
 
   case class AddPersonData(
       name: String
-  )
+    )
 
   override def execute(): AppOp[SuccessMsg] = {
     def validateData(
         name: String
-    ): IsValid[AddPersonData] = {
+      ): IsValid[AddPersonData] =
       nonEmptyString(name).map(AddPersonData.apply)
-    }
 
-    def readData(): AppOp[AddPersonData] = {
+    def readData(): AppOp[AddPersonData] =
       for {
-        env <- readEnv
-        name <- env.console.readLine("Enter name: ").toAppOp
+        env       <- readEnv
+        name      <- env.console.readLine("Enter name: ").toAppOp
         validData <- validateData(name).toAppOp
       } yield validData
-    }
 
-    /**
-      * TODO: Use readData() to read person data from console and use it to add a
+    /** TODO: Use readData() to read person data from console and use it to add a
       * new person to the state.
       *
       * Upon successful completion, return the message 'Person created successfully'.
@@ -141,29 +132,28 @@ case object AddPersonCommand extends Command {
 case object ComputeDebtCommand extends Command {
   override val name: String = "Compute debt"
 
-  override def execute(): AppOp[SuccessMsg] = {
+  override def execute(): AppOp[SuccessMsg] =
     for {
-      env <- readEnv
+      env       <- readEnv
       payerDebt <- env.expenseService.computeDebt().toAppOp
-      _ <- env.console.printLine(payerDebt.show).toAppOp
+      _         <- env.console.printLine(payerDebt.show).toAppOp
     } yield "Debt computed successfully"
-  }
 }
 
 case object ListAllPeopleCommand extends Command {
   override val name: String = "List all people"
 
-  override def execute(): AppOp[SuccessMsg] = {
+  override def execute(): AppOp[SuccessMsg] =
     for {
-      env <- readEnv
+      env    <- readEnv
       people <- env.personService.getAllPeople().toAppOp
       _ <-
-        env.console
+        env
+          .console
           .printLine(
             s"""List of people:
                |${people.map(p => s"- ${p.show}").mkString("\n")}""".stripMargin
           )
           .toAppOp
     } yield "All people listed!"
-  }
 }

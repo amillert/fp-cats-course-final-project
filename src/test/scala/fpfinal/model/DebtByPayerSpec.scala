@@ -1,7 +1,7 @@
 package fpfinal.model
 
 import cats.implicits._
-import cats.kernel.laws.discipline.{EqTests, MonoidTests}
+import cats.kernel.laws.discipline.{ EqTests, MonoidTests }
 import fpfinal.FpFinalSpec
 
 class DebtByPayerSpec extends FpFinalSpec {
@@ -30,7 +30,7 @@ class DebtByPayerSpec extends FpFinalSpec {
     forAll { (e1: Expense, e2: Expense) =>
       val d1 = DebtByPayer.fromExpense(e1)
       val d2 = DebtByPayer.fromExpense(e2)
-      val d = d1 |+| d2
+      val d  = d1 |+| d2
       assert(d.allPayers().forall { p =>
         d.debtForPayer(p) eqv d1.debtForPayer(p) |+| d2.debtForPayer(p)
       })

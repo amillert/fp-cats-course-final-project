@@ -10,15 +10,15 @@ class AppSpec extends AnyFunSuite with Matchers {
   test("Successful command flow") {
     val fakeEnv: FakeEnv = new FakeEnv {
       override var linesToRead: List[String] = List(
-        "0", // The command number (add person)
+        "0",       // The command number (add person)
         "Leandro", // The name of the person
-        "1", // The command number (add expense)
+        "1",       // The command number (add expense)
         "Leandro", // The payer
         "2000.00", // The amount
-        "Martin", // The first participant
-        "Susan", // The second participant
-        "END", // No more participants
-        "4" // The command number (exit)
+        "Martin",  // The first participant
+        "Susan",   // The second participant
+        "END",     // No more participants
+        "4"        // The command number (exit)
       )
     }
 
@@ -34,21 +34,21 @@ class AppSpec extends AnyFunSuite with Matchers {
   test("Invalid flow example") {
     val fakeEnv: FakeEnv = new FakeEnv {
       override var linesToRead: List[String] = List(
-        "0", // The command number (add person)
+        "0",       // The command number (add person)
         "Leandro", // The name of the person
-        "0", // The command number (add person)
-        "Martin", // The name of the person
-        "1", // The command number (add expense)
-        "Masi", // The payer (does not exist)
-        "2000", // The amount
-        "Martin", // First participant
-        "END", // No more participants
-        "1", // The command number (add expense)
-        "Martin", // The payer
-        "2000", // The amount
+        "0",       // The command number (add person)
+        "Martin",  // The name of the person
+        "1",       // The command number (add expense)
+        "Masi",    // The payer (does not exist)
+        "2000",    // The amount
+        "Martin",  // First participant
+        "END",     // No more participants
+        "1",       // The command number (add expense)
+        "Martin",  // The payer
+        "2000",    // The amount
         "Leandro", // First participant
-        "END", // No more participants
-        "4" // Exit
+        "END",     // No more participants
+        "4"        // Exit
       )
     }
 

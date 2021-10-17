@@ -3,7 +3,7 @@ package fpfinal.service
 import cats._
 import cats.data._
 import cats.implicits._
-import fpfinal.model.{DebtByPayer, Expense}
+import fpfinal.model.{ DebtByPayer, Expense }
 
 trait ExpenseService {
   import ExpenseService._
@@ -20,22 +20,22 @@ object ExpenseService {
   type ExpenseOp[A] = State[ExpenseState, A]
   case class ExpenseState(
       expenses: List[Expense]
-  ) {
+    ) {
     def addExpense(expense: Expense): ExpenseState =
       copy(expenses = expense :: expenses)
   }
   object ExpenseState {
     def empty: ExpenseState = ExpenseState(Nil)
 
-    implicit def eqExpenseState(implicit
+    implicit def eqExpenseState(
+        implicit
         eqExpense: Eq[Expense]
-    ): Eq[ExpenseState] =
+      ): Eq[ExpenseState] =
       Eq.instance((es1, es2) => es1.expenses === es2.expenses)
   }
 }
 
-/**
-  * TODO: Implement a LiveExpenseService to implement the ExpenseService trait.
+/** TODO: Implement a LiveExpenseService to implement the ExpenseService trait.
   *
   * The addExpense method should add the given expense to the ExpenseState, and return it
   * as it is.

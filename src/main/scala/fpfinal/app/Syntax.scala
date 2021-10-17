@@ -11,15 +11,14 @@ object Syntax {
   implicit class IOOps[A](fa: IO[A]) {
     def toAppOp: AppOp[A] = {
       val errorOr: ErrorOr[A] = EitherT.liftF(fa)
-      val st: St[A] = StateT.liftF(errorOr)
+      val st: St[A]           = StateT.liftF(errorOr)
       ReaderT.liftF(st)
     }
   }
 
   implicit class PersonOps[A](fa: PersonOp[A]) {
 
-    /**
-      * TODO: Translate between a PersonOp and an AppOp.
+    /** TODO: Translate between a PersonOp and an AppOp.
       *
       * Make sure the resulting AppState contains the PersonState
       * from this PersonOp.
@@ -29,7 +28,7 @@ object Syntax {
 
   implicit class ValidOps[A](fa: IsValid[A]) {
     def toAppOp: AppOp[A] = {
-      val errorOr: ErrorOr[A] = {
+      val errorOr: ErrorOr[A] =
         EitherT.fromEither(
           fa.toEither
             .leftMap { e =>
@@ -37,7 +36,6 @@ object Syntax {
             }
         )
 
-      }
       val st: St[A] = StateT.liftF(errorOr)
       ReaderT.liftF(st)
     }
@@ -57,13 +55,13 @@ object Syntax {
     def unsafeRunApp(
         environment: Environment,
         initialState: AppState
-    ): Either[Error, (AppState, A)] =
+      ): Either[Error, (AppState, A)] =
       fa.run(environment).run(initialState).value.run
 
     def unsafeRunAppS(
         environment: Environment,
         initialState: AppState
-    ): Either[Error, AppState] =
+      ): Either[Error, AppState] =
       unsafeRunApp(environment, initialState).map(_._1)
   }
 }

@@ -4,7 +4,7 @@ import cats.implicits._
 import fpfinal.FpFinalSpec
 import fpfinal.app.Syntax._
 import fpfinal.fakes.FakeEnv
-import fpfinal.model.{Expense, Money, Person}
+import fpfinal.model.{ Expense, Money, Person }
 import fpfinal.service.PersonService.PersonState
 
 class AddExpenseCommandSpec extends FpFinalSpec {
@@ -14,8 +14,8 @@ class AddExpenseCommandSpec extends FpFinalSpec {
         PersonState(
           Map(
             "Leandro" -> Person.unsafeCreate("Leandro"),
-            "Martin" -> Person.unsafeCreate("Martin"),
-            "Susan" -> Person.unsafeCreate("Susan")
+            "Martin"  -> Person.unsafeCreate("Martin"),
+            "Susan"   -> Person.unsafeCreate("Susan")
           )
         )
       )
@@ -23,9 +23,9 @@ class AddExpenseCommandSpec extends FpFinalSpec {
         override var linesToRead: List[String] = List(
           "Leandro", // The payer
           "2000.00", // The amount
-          "Martin", // The first participant
-          "Susan", // The second participant
-          "END" // No more participants
+          "Martin",  // The first participant
+          "Susan",   // The second participant
+          "END"      // No more participants
         )
       }
       val expense = Expense.unsafeCreate(
@@ -50,8 +50,8 @@ class AddExpenseCommandSpec extends FpFinalSpec {
         PersonState(
           Map(
             "Leandro" -> Person.unsafeCreate("Leandro"),
-            "Martin" -> Person.unsafeCreate("Martin"),
-            "Susan" -> Person.unsafeCreate("Susan")
+            "Martin"  -> Person.unsafeCreate("Martin"),
+            "Susan"   -> Person.unsafeCreate("Susan")
           )
         )
       )
@@ -59,7 +59,7 @@ class AddExpenseCommandSpec extends FpFinalSpec {
         override var linesToRead: List[String] = List(
           "Leandro", // The payer
           "2000.00", // The amount
-          "END" // No more participants
+          "END"      // No more participants
         )
       }
       val expense = Expense.unsafeCreate(

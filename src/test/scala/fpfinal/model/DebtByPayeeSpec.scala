@@ -2,7 +2,7 @@ package fpfinal.model
 
 import cats.data.NonEmptySet
 import cats.implicits._
-import cats.kernel.laws.discipline.{EqTests, MonoidTests}
+import cats.kernel.laws.discipline.{ EqTests, MonoidTests }
 import fpfinal.FpFinalSpec
 
 import scala.collection.immutable.SortedSet
@@ -36,7 +36,7 @@ class DebtByPayeeSpec extends FpFinalSpec {
     forAll { (e1: Expense, e2: Expense) =>
       val d1 = DebtByPayee.fromExpense(e1)
       val d2 = DebtByPayee.fromExpense(e2)
-      val d = d1 |+| d2
+      val d  = d1 |+| d2
       assert(d.allPayees().forall { p =>
         d.debtForPayee(p) eqv d1.debtForPayee(p) <+> d2.debtForPayee(p)
       })
@@ -45,13 +45,11 @@ class DebtByPayeeSpec extends FpFinalSpec {
 
   test("every participant of the expense get the same debt") {
     forAll { (expense: Expense) =>
-      val debtByPayee = DebtByPayee.fromExpense(expense)
-      val firstPayee = expense.participants.head
+      val debtByPayee    = DebtByPayee.fromExpense(expense)
+      val firstPayee     = expense.participants.head
       val firstPayeeDebt = debtByPayee.debtForPayee(firstPayee)
       assert(
-        expense.participants.forall(p =>
-          debtByPayee.debtForPayee(p) eqv firstPayeeDebt
-        )
+        expense.participants.forall(p => debtByPayee.debtForPayee(p) eqv firstPayeeDebt)
       )
     }
   }

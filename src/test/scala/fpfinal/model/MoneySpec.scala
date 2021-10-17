@@ -2,9 +2,9 @@ package fpfinal.model
 
 import cats.data.Validated.Valid
 import cats.implicits._
-import cats.kernel.laws.discipline.{EqTests, MonoidTests}
+import cats.kernel.laws.discipline.{ EqTests, MonoidTests }
 import fpfinal.FpFinalSpec
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.{ Arbitrary, Gen }
 
 class MoneySpec extends FpFinalSpec {
   test("unsafe create") {

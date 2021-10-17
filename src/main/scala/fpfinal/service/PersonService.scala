@@ -25,17 +25,17 @@ object PersonService {
   object PersonState {
     def empty: PersonState = PersonState(Map.empty)
 
-    implicit def eqPersonState(implicit
+    implicit def eqPersonState(
+        implicit
         eqMap: Eq[Map[String, Person]]
-    ): Eq[PersonState] =
+      ): Eq[PersonState] =
       Eq.instance((ps1, ps2) => ps1.personByName eqv ps2.personByName)
   }
 
   type PersonOp[A] = State[PersonState, A]
 }
 
-/**
-  * Implement a LivePersonService with an implementation for PersonService.
+/** Implement a LivePersonService with an implementation for PersonService.
   *
   * findByName returns the person in the state with the given name,
   * or None if it doesn't find it.

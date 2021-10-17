@@ -2,7 +2,7 @@ package fpfinal.model
 
 import cats.data.Validated.Valid
 import cats.implicits._
-import cats.kernel.laws.discipline.{EqTests, OrderTests}
+import cats.kernel.laws.discipline.{ EqTests, OrderTests }
 import fpfinal.FpFinalSpec
 import org.scalacheck.Gen
 

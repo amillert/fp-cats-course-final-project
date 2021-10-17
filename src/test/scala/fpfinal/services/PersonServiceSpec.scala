@@ -5,7 +5,7 @@ import cats.kernel.laws.discipline.EqTests
 import fpfinal.FpFinalSpec
 import fpfinal.model.Person
 import fpfinal.service.PersonService._
-import fpfinal.service.{LivePersonService, PersonService}
+import fpfinal.service.{ LivePersonService, PersonService }
 
 class PersonServiceSpec extends FpFinalSpec {
   val service: PersonService#Service = new LivePersonService {}.personService

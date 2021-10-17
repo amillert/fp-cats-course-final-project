@@ -12,10 +12,9 @@ class Expense private (
     val payer: Person,
     val amount: Money,
     val participants: NonEmptySet[Person]
-) {
+  ) {
 
-  /**
-    * TODO: Divide this amount accross the payer and the participants so each
+  /** TODO: Divide this amount accross the payer and the participants so each
     * has the same debt for this expense
     */
   def amountByParticipant: Money = ???
@@ -26,15 +25,14 @@ object Expense {
       payer: Person,
       amount: Money,
       participants: List[Person]
-  ): Expense =
+    ): Expense =
     new Expense(
       payer,
       amount,
       NonEmptySet.fromSetUnsafe(SortedSet.from(participants))
     )
 
-  /**
-    * TODO: Create a validated expense. The validations to perform are:
+  /** TODO: Create a validated expense. The validations to perform are:
     * - The participants list should not be empty
     * - The payer should not be included in the participants
     *
@@ -45,17 +43,17 @@ object Expense {
       payer: Person,
       amount: Money,
       participants: List[Person]
-  )(implicit eqPerson: Eq[Person]): IsValid[Expense] = ???
+    )(implicit
+      eqPerson: Eq[Person]
+    ): IsValid[Expense] = ???
 
-  /**
-    * TODO: Implement an Eq instance by comparing every field.
+  /** TODO: Implement an Eq instance by comparing every field.
     * Parameterize it so that we can pass definitions of Eq for
     * each of the types we need to compare (i.e.: Person, Money, NonEmptySet[Person]).
     */
   implicit def eqExpense = ???
 
-  /**
-    * TODO: Implement a Show instance with the following format:
+  /** TODO: Implement a Show instance with the following format:
     *
     * Expense[Payer=Martin,Amount=$10.00,Participants=Bob,Susan]
     */

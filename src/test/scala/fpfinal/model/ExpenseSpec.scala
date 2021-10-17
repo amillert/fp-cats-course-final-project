@@ -4,7 +4,7 @@ import cats.data.Validated.Valid
 import cats.implicits._
 import cats.kernel.laws.discipline.EqTests
 import fpfinal.FpFinalSpec
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.{ Arbitrary, Gen }
 
 class ExpenseSpec extends FpFinalSpec {
   test("create a valid expense") {

@@ -6,7 +6,7 @@ import fpfinal.service.PersonService
 import fpfinal.service.PersonService.PersonOp
 
 trait FakePersonService extends PersonService {
-  var peopleAdded = List[Person]()
+  var peopleAdded    = List[Person]()
   var peopleSearched = 0
 
   override val personService: Service = new Service {

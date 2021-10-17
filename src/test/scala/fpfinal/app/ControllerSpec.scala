@@ -1,7 +1,7 @@
 package fpfinal.app
 
 import fpfinal.FpFinalSpec
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.{ Arbitrary, Gen }
 
 class ControllerSpec extends FpFinalSpec {
   val controller: LiveController#Service = new LiveController {}.controller

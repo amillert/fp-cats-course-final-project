@@ -2,13 +2,13 @@ package fpfinal.fakes
 
 import cats.Monoid
 import cats.implicits._
-import fpfinal.model.{DebtByPayer, Expense}
+import fpfinal.model.{ DebtByPayer, Expense }
 import fpfinal.service.ExpenseService
 import fpfinal.service.ExpenseService.ExpenseOp
 
 trait FakeExpenseService extends ExpenseService {
 
-  var callsToAddExpense = 0
+  var callsToAddExpense  = 0
   var callsToComputeDebt = 0
 
   override val expenseService: Service = new Service {
