@@ -5,16 +5,22 @@ import cats.data.{ NonEmptyChain, NonEmptySet, Validated }
 import fpfinal.app.Configuration.IsValid
 
 import scala.collection.immutable.SortedSet
+import scala.util.Try
 
 object Validations {
 
-  /** TODO: Check that this String's length does not exceed the provided limit.
-    */
-  def maxLength(s: String, n: Int): IsValid[String] = ???
+  /** TODO: Check that this String's length does not exceed the provided limit. */
+  def maxLength(s: String, n: Int): IsValid[String] =
+    if (s.length <= n) Validated.Valid(s) else Validated.Invalid(NonEmptyChain("too short"))
 
-  /** TODO: Turn this String into a validated double
-    */
-  def double(s: String): IsValid[Double] = ???
+  /** TODO: Turn this String into a validated double */
+  def double(s: String): IsValid[Double] =
+    Try(s.toDouble)
+      .toEither
+      .fold(
+        _ => Validated.Invalid(NonEmptyChain("can't convert string to double")),
+        Validated.Valid.apply
+      )
 
   def nonNegative(x: Double): IsValid[Double] =
     Validated.condNec(x >= 0, x, s"Double should be nonnegative")
